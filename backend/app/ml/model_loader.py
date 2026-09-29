@@ -3,6 +3,7 @@ import numpy as np
 from app.core.config import settings
 from app.core.logging import logger
 
+
 class ModelManager:
     """
     Singleton manager for the deepfake detection model.
