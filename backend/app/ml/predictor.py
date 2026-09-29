@@ -19,17 +19,38 @@ def predict_video(video_path: str) -> Dict[str, Any]:
     logger.info(f"Frame extraction time: {time.time() - t0:.3f}s")
 
     # Step 2: Batch feature extraction (NO LOOP)
-    t0 = time.time()
-    frames_tensor = frames.astype(np.float32)
+    # Step 2: Memory-efficient feature extraction
+t0 = time.time()
 
-    if model_manager.feature_extractor is not None:
-        # Pass all 20 frames at once
-        features = model_manager.feature_extractor(frames_tensor, training=False).numpy()
-    else:
-        # Dummy features if model file is missing
-        features = np.random.randn(num_frames, settings.NUM_FEATURES).astype(np.float32)
-    
-    logger.info(f"Feature extraction time: {time.time() - t0:.3f}s")
+if model_manager.feature_extractor is not None:
+    feature_list = []
+
+    for i, frame in enumerate(frames):
+        frame_tensor = np.expand_dims(
+            frame.astype(np.float32),
+            axis=0
+        )
+
+        feature = model_manager.feature_extractor(
+            frame_tensor,
+            training=False
+        ).numpy()
+
+        feature_list.append(feature[0])
+
+        del frame_tensor
+        del feature
+
+    features = np.asarray(feature_list, dtype=np.float32)
+
+else:
+    # Dummy features if model file is missing
+    features = np.random.randn(
+        num_frames,
+        settings.NUM_FEATURES
+    ).astype(np.float32)
+
+logger.info(f"Feature extraction time: {time.time() - t0:.3f}s")
 
     # Step 3: Pad/truncate to fixed sequence length & create mask
     seq_features = np.zeros((1, settings.MAX_SEQ_LENGTH, settings.NUM_FEATURES), dtype=np.float32)
