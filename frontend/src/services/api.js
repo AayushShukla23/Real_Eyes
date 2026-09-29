@@ -1,8 +1,8 @@
 import axios from 'axios';
 
 const api = axios.create({
-  baseURL: '/api/v1',
-  timeout: 120000, // 2 minutes for large video uploads
+  baseURL: 'https://realeyes-api-yu1x.onrender.com/api/v1',
+  timeout: 120000,
 });
 
 export const checkHealth = async () => {
