@@ -18,57 +18,88 @@ def predict_video(video_path: str) -> Dict[str, Any]:
     num_frames = len(frames)
     logger.info(f"Frame extraction time: {time.time() - t0:.3f}s")
 
-    # Step 2: Batch feature extraction (NO LOOP)
     # Step 2: Memory-efficient feature extraction
-t0 = time.time()
+    t0 = time.time()
 
-if model_manager.feature_extractor is not None:
-    feature_list = []
+    if model_manager.feature_extractor is not None:
+        feature_list = []
 
-    for i, frame in enumerate(frames):
-        frame_tensor = np.expand_dims(
-            frame.astype(np.float32),
-            axis=0
-        )
+        # Process one frame at a time to reduce peak memory usage
+        for i, frame in enumerate(frames):
+            frame_tensor = np.expand_dims(
+                frame.astype(np.float32),
+                axis=0
+            )
 
-        feature = model_manager.feature_extractor(
-            frame_tensor,
-            training=False
-        ).numpy()
+            feature = model_manager.feature_extractor(
+                frame_tensor,
+                training=False
+            ).numpy()
 
-        feature_list.append(feature[0])
+            feature_list.append(feature[0])
 
-        del frame_tensor
-        del feature
+            # Release temporary tensors immediately
+            del frame_tensor
+            del feature
 
-    features = np.asarray(feature_list, dtype=np.float32)
+        features = np.asarray(feature_list, dtype=np.float32)
 
-else:
-    # Dummy features if model file is missing
-    features = np.random.randn(
-        num_frames,
-        settings.NUM_FEATURES
-    ).astype(np.float32)
+    else:
+        # Dummy features if model file is missing
+        features = np.random.randn(
+            num_frames,
+            settings.NUM_FEATURES
+        ).astype(np.float32)
 
-logger.info(f"Feature extraction time: {time.time() - t0:.3f}s")
+    logger.info(
+        f"Feature extraction time: {time.time() - t0:.3f}s"
+    )
 
     # Step 3: Pad/truncate to fixed sequence length & create mask
-    seq_features = np.zeros((1, settings.MAX_SEQ_LENGTH, settings.NUM_FEATURES), dtype=np.float32)
-    seq_mask = np.zeros((1, settings.MAX_SEQ_LENGTH), dtype=bool)
+    seq_features = np.zeros(
+        (
+            1,
+            settings.MAX_SEQ_LENGTH,
+            settings.NUM_FEATURES
+        ),
+        dtype=np.float32
+    )
 
-    length = min(num_frames, settings.MAX_SEQ_LENGTH)
+    seq_mask = np.zeros(
+        (
+            1,
+            settings.MAX_SEQ_LENGTH
+        ),
+        dtype=bool
+    )
+
+    length = min(
+        num_frames,
+        settings.MAX_SEQ_LENGTH
+    )
+
     seq_features[0, :length, :] = features[:length]
     seq_mask[0, :length] = True
 
     # Step 4: Temporal classification
     t0 = time.time()
+
     if model_manager.model is not None:
-        raw_score = float(model_manager.model.predict([seq_features, seq_mask], verbose=0)[0][0])
+        raw_score = float(
+            model_manager.model.predict(
+                [seq_features, seq_mask],
+                verbose=0
+            )[0][0]
+        )
     else:
         # Dummy score if model file is missing
-        raw_score = float(np.random.uniform(0.1, 0.9))
-        
-    logger.info(f"Model inference time: {time.time() - t0:.3f}s")
+        raw_score = float(
+            np.random.uniform(0.1, 0.9)
+        )
+
+    logger.info(
+        f"Model inference time: {time.time() - t0:.3f}s"
+    )
 
     # Step 5: Format output
     total_time = (time.time() - start_time) * 1000
@@ -76,7 +107,10 @@ logger.info(f"Feature extraction time: {time.time() - t0:.3f}s")
 
     return {
         "prediction": "FAKE" if is_fake else "REAL",
-        "confidence": round(raw_score if is_fake else 1.0 - raw_score, 4),
+        "confidence": round(
+            raw_score if is_fake else 1.0 - raw_score,
+            4
+        ),
         "raw_score": round(raw_score, 4),
         "model_metadata": {
             "version": settings.APP_VERSION,
