@@ -30,7 +30,10 @@ class ModelManager:
 
             # Load the classification model (GRU)
             if os.path.exists(settings.MODEL_PATH):
-                self._model = tf.keras.models.load_model(settings.MODEL_PATH)
+                self._model = tf.keras.models.load_model(
+    settings.MODEL_PATH,
+    compile=False
+)
                 logger.info(f"Model loaded from {settings.MODEL_PATH}")
             else:
                 logger.warning(
