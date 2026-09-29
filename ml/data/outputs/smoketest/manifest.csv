@@ -1,0 +1,11 @@
+video_id,path,dataset,label,source_video_id,manipulation_type
+smoke_01_fake_a,ml/data/samples/smoketest/fake/smoke_01_fake_a.mp4,smoketest,1,smoke_01,synthetic_dummy
+smoke_01_real,ml/data/samples/smoketest/real/smoke_01_real.mp4,smoketest,0,smoke_01,
+smoke_02_fake_a,ml/data/samples/smoketest/fake/smoke_02_fake_a.mp4,smoketest,1,smoke_02,synthetic_dummy
+smoke_02_real,ml/data/samples/smoketest/real/smoke_02_real.mp4,smoketest,0,smoke_02,
+smoke_03_fake_a,ml/data/samples/smoketest/fake/smoke_03_fake_a.mp4,smoketest,1,smoke_03,synthetic_dummy
+smoke_03_real,ml/data/samples/smoketest/real/smoke_03_real.mp4,smoketest,0,smoke_03,
+smoke_04_fake_a,ml/data/samples/smoketest/fake/smoke_04_fake_a.mp4,smoketest,1,smoke_04,synthetic_dummy
+smoke_04_real,ml/data/samples/smoketest/real/smoke_04_real.mp4,smoketest,0,smoke_04,
+smoke_05_fake_a,ml/data/samples/smoketest/fake/smoke_05_fake_a.mp4,smoketest,1,smoke_05,synthetic_dummy
+smoke_05_real,ml/data/samples/smoketest/real/smoke_05_real.mp4,smoketest,0,smoke_05,

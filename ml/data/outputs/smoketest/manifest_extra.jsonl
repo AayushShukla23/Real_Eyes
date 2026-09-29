@@ -1,0 +1,10 @@
+{"extra": {"fixture": true, "role": "fake", "synthetic": true}, "video_id": "smoke_01_fake_a"}
+{"extra": {"fixture": true, "role": "real", "synthetic": true}, "video_id": "smoke_01_real"}
+{"extra": {"fixture": true, "role": "fake", "synthetic": true}, "video_id": "smoke_02_fake_a"}
+{"extra": {"fixture": true, "role": "real", "synthetic": true}, "video_id": "smoke_02_real"}
+{"extra": {"fixture": true, "role": "fake", "synthetic": true}, "video_id": "smoke_03_fake_a"}
+{"extra": {"fixture": true, "role": "real", "synthetic": true}, "video_id": "smoke_03_real"}
+{"extra": {"fixture": true, "role": "fake", "synthetic": true}, "video_id": "smoke_04_fake_a"}
+{"extra": {"fixture": true, "role": "real", "synthetic": true}, "video_id": "smoke_04_real"}
+{"extra": {"fixture": true, "role": "fake", "synthetic": true}, "video_id": "smoke_05_fake_a"}
+{"extra": {"fixture": true, "role": "real", "synthetic": true}, "video_id": "smoke_05_real"}

@@ -1,0 +1,11 @@
+video_id,source_video_id,split
+smoke_01_fake_a,smoke_01,test
+smoke_01_real,smoke_01,test
+smoke_02_fake_a,smoke_02,val
+smoke_02_real,smoke_02,val
+smoke_03_fake_a,smoke_03,train
+smoke_03_real,smoke_03,train
+smoke_04_fake_a,smoke_04,train
+smoke_04_real,smoke_04,train
+smoke_05_fake_a,smoke_05,train
+smoke_05_real,smoke_05,train
